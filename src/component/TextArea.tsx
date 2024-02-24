@@ -2,8 +2,15 @@ import React from "react";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { styled } from "@mui/system";
 
-
-export const AutoTextarea = ({ name, onChange }: { name: string; onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void }) => {
+export const AutoTextarea = ({
+  name,
+  onChange,
+  value,
+}: {
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) => {
   return (
     <StyledTextarea
       aria-label="minimum height"
@@ -11,6 +18,7 @@ export const AutoTextarea = ({ name, onChange }: { name: string; onChange: (e: R
       placeholder="Description"
       name={name}
       onChange={onChange}
+      value={value}
       required
     />
   );
@@ -25,12 +33,10 @@ const grey = {
   50: "#F3F6F9",
   300: "#C7D0DD",
   900: "#0A0A0B",
-
 };
 
-
 const StyledTextarea = styled(TextareaAutosize)(
-({ theme }) => `
+  ({ theme }) => `
     box-sizing: border-box;
     width: 100%;
     max-width: 100%;
@@ -63,4 +69,4 @@ const StyledTextarea = styled(TextareaAutosize)(
       outline: 0;
     }
   `
-  );
+);

@@ -41,7 +41,7 @@ const AddNewNote: React.FC<Props> = () => {
 
   return (
     <Grid container mt={5} justifyContent="center" alignItems="center">
-      <Grid item xs={10} md={8}>
+      <Grid item xs={10} md={8} sx={{ textAlign: "right" }}>
         <Button
           onClick={() => setIsModalOpen(true)}
           variant="contained"
@@ -75,14 +75,18 @@ const AddNewNote: React.FC<Props> = () => {
                   />
                 </Grid>
                 <Grid item xs={12} md={12} mt={2}>
-                  <AutoTextarea name="content" onChange={handleChange} />
+                  <AutoTextarea
+                    value={note.content}
+                    name="content"
+                    onChange={handleChange}
+                  />
                 </Grid>
                 <Grid item xs={12} md={12} mt={2} sx={{ textAlign: "right" }}>
                   <Button
                     variant="contained"
                     onClick={() => setIsModalOpen(false)}
                     sx={{
-                      mt: 1, 
+                      mt: 1,
                       backgroundColor: "#bb2124",
                       "&:hover": {
                         backgroundColor: "#8f0000",
@@ -91,7 +95,11 @@ const AddNewNote: React.FC<Props> = () => {
                   >
                     cancel
                   </Button>
-                  <Button variant="contained" type="submit" sx={{ ml: 1.5 , mt: 1}}>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    sx={{ ml: 1.5, mt: 1 }}
+                  >
                     Add
                   </Button>
                 </Grid>

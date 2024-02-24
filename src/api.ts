@@ -35,3 +35,25 @@ export const deleteNote = async (_id: string) => {
   }
   return response.json();
 };
+
+export const updateNote = async (
+  _id: string,
+  updatedNote: { content: string; title: string }
+) => {
+  try {
+    const response = await fetch(`http://localhost:3005/api/notes/${_id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedNote),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update the note");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error updating the note:", error);
+    throw error;
+  }
+};
