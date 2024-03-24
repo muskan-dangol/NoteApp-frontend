@@ -1,12 +1,10 @@
 import React from "react";
-import Notes from "./component/NotesList";
-import AddNewNote from "./component/NewNote";
+import UserLogin from "./component/Login";
 
 const App: React.FC = () => {
   return (
     <>
-      <AddNewNote />
-      <Notes />
+      <UserLogin/>
     </>
   );
 };

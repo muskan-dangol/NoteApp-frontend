@@ -4,5 +4,12 @@ export interface Note {
   content: string;
   date?: string;
 }
+export interface User {
+  id: string;
+  username: string;
+  name: string;
+  password: string;
+}
 
 export type NoteFormValue = Omit<Note, "id ">;
+export type UserValue = Omit<User, "id">;

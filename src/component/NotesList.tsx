@@ -1,8 +1,9 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { useState } from "react";
-import { fetchData, deleteNote } from "../api";
+import { fetchData, deleteNote } from "../services/api";
 import EditNote from "./EditNote";
+import { userId } from "../services/api";
 import {
   Accordion,
   AccordionActions,
@@ -34,7 +35,6 @@ const Notes: React.FC = () => {
   const handleDeleteNote = async (_id: string) => {
     try {
       await deleteNote(_id);
-      console.log("deleted: ", _id);
       refetch();
     } catch (error) {
       console.error("Error deleting note:", error);
@@ -48,13 +48,13 @@ const Notes: React.FC = () => {
   if (error) {
     return <div>Error fetching data: {}</div>;
   }
-
+  const userNotes = data.filter((note: any) => note.user[0].id === userId);
   return (
     <Grid container spacing={3} justifyContent="center" alignItems="center">
       <Grid item xs={10} md={8}>
         <Typography variant="h4">Your notes:</Typography>
       </Grid>
-      {data.map((note: any, index: number) => (
+      {userNotes.map((note: any, index: number) => (
         <Grid item key={index} xs={10} md={8}>
           <Accordion sx={{ width: "100%" }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>

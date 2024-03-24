@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal, Grid, Box, Typography, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { updateNote } from "../api";
+import { updateNote } from "../services/api";
 import { AutoTextarea } from "./TextArea";
 interface EditNoteProps {
   open: boolean;

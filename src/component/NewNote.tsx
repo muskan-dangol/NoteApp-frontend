@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import { Box, Button, Grid, Modal, TextField, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { AutoTextarea } from "./TextArea";
-import { addNewNote } from "../api";
+import { addNewNote } from "../services/api";
 import { noteDataState } from "../store/atom";
 import { useRecoilState } from "recoil";
-import { fetchData } from "../api";
+import { fetchData } from "../services/api";
 import { useQuery } from "react-query";
+import { userId } from "../services/api";
 
 type Props = {};
 const AddNewNote: React.FC<Props> = () => {
   const { refetch } = useQuery("myData", fetchData, {
     enabled: true,
   });
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [note, setNote] = useRecoilState(noteDataState);
 
@@ -31,23 +33,35 @@ const AddNewNote: React.FC<Props> = () => {
   const handleSubmit = async (e: any) => {
     try {
       e.preventDefault();
-      await addNewNote(note);
+      const noteWithUserId = {
+        ...note,
+        user: [userId],
+      };
+      await addNewNote(noteWithUserId);
       setIsModalOpen(false);
       refetch();
-    } catch (error) {
-      console.error("Error adding a new note note:", error);
+    } catch (error: any) {
+      console.log(error.stack);
+      console.error("Error adding a new note:", error);
     }
   };
 
+  const handleLogOut = () => {
+    localStorage.removeItem("loggedNoteappUser");
+  };
+  
   return (
     <Grid container mt={5} justifyContent="center" alignItems="center">
       <Grid item xs={10} md={8} sx={{ textAlign: "right" }}>
         <Button
           onClick={() => setIsModalOpen(true)}
           variant="contained"
-          sx={{ mb: 3 }}
+          sx={{ mb: 3, mr: 1 }}
         >
           Add Note
+        </Button>
+        <Button onClick={handleLogOut} variant="contained" sx={{ mb: 3 }}>
+          log out
         </Button>
         <Modal open={isModalOpen} onClose={onModalCloseRequest}>
           <Grid container>
