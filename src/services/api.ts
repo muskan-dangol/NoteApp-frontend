@@ -1,21 +1,44 @@
 import { apiBaseUrl } from "../constant";
 
-let token: null | string = null;
-export let userId: null | string = null;
+export const getUserId = () => {
+  const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
+  if (!loggedUserJSON) {
+    throw new Error("User is not logged in");
+  }
+  const user = JSON.parse(loggedUserJSON);
+  return user.id;
+};
 
-export const setToken = (newToken: string) => {
-  token = `Bearer ${newToken}`;
+export const getToken = () => {
+  const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
+  if (!loggedUserJSON) {
+    throw new Error("User is not logged in");
+  }
+  const user = JSON.parse(loggedUserJSON);
+  return `Bearer ${user.token}`;
 };
-export const setUserId = (newUserId: string) => {
-  userId = newUserId;
-};
+
+
 export const fetchData = async () => {
-  const response = await fetch(apiBaseUrl);
-  const data = await response.json();
-  return data;
+  try {
+    const token = getToken();
+    const response = await fetch(apiBaseUrl, {
+      method: "GET",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch notes error:", error);
+  }
 };
 
 export const addNewNote = async (note: any) => {
+  const userId = getUserId();
+  const token = getToken();
   try {
     if (!token) {
       throw new Error("Token is not available");

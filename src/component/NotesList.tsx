@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { useState } from "react";
 import { fetchData, deleteNote } from "../services/api";
 import EditNote from "./EditNote";
-import { userId } from "../services/api";
+import AddNewNote from "./NewNote";
 import {
   Accordion,
   AccordionActions,
@@ -20,9 +20,7 @@ const Notes: React.FC = () => {
   const { data, error, isLoading, refetch } = useQuery("myData", fetchData, {
     enabled: true,
   });
-
   const [editNoteId, setEditNoteId] = useState<string | null>(null);
-
   const handleEditNote = (noteId: string) => {
     setEditNoteId(noteId);
   };
@@ -48,13 +46,16 @@ const Notes: React.FC = () => {
   if (error) {
     return <div>Error fetching data: {}</div>;
   }
-  const userNotes = data.filter((note: any) => note.user[0].id === userId);
+  
   return (
     <Grid container spacing={3} justifyContent="center" alignItems="center">
       <Grid item xs={10} md={8}>
-        <Typography variant="h4">Your notes:</Typography>
+        <AddNewNote />
       </Grid>
-      {userNotes.map((note: any, index: number) => (
+      <Grid item xs={10} md={8}>
+        <Typography variant="h4">welcome to your notes</Typography>
+      </Grid>
+      {data.map((note: any, index: number) => (
         <Grid item key={index} xs={10} md={8}>
           <Accordion sx={{ width: "100%" }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import { loginUserState } from "../store/atom";
-import { signIn } from "../services/login";
+import { SignInUserState } from "../store/atom";
+import { signUp } from "../services/login";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
@@ -12,32 +12,24 @@ import {
 } from "@mui/material";
 
 type Props = {};
-const UserLogin: React.FC<Props> = () => {
-  const [userInfo, setUserInfo] = useRecoilState(loginUserState);
+const UserSignUp: React.FC<Props> = () => {
+  const [newUser, setNewUser] = useRecoilState(SignInUserState);
 
   const navigate = useNavigate();
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const User = await signIn(userInfo);      
-      navigate("/notes");
-      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(User));
-      const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
-      if (!loggedUserJSON) {
-        throw new Error();
-      }
-      JSON.parse(loggedUserJSON);
+      await signUp(newUser);
+      navigate("/");
     } catch (error) {
       throw error;
     }
   };
-  const handleClickRegister = () => {
-    navigate("/signup");
-  };
 
   return (
     <div>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSignup}>
         <Grid container>
           <Grid
             item
@@ -72,19 +64,27 @@ const UserLogin: React.FC<Props> = () => {
                 sx={{ mt: 3 }}
                 type="text"
                 placeholder="Username"
-                value={userInfo.username}
+                value={newUser.username}
                 onChange={(e) =>
-                  setUserInfo({ ...userInfo, username: e.target.value })
+                  setNewUser({ ...newUser, username: e.target.value })
                 }
               />
-
+              <TextField
+                sx={{ mt: 3 }}
+                type="text"
+                placeholder="name"
+                value={newUser.name}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, name: e.target.value })
+                }
+              />
               <TextField
                 sx={{ mt: 2 }}
                 type="password"
                 placeholder="Password"
-                value={userInfo.password}
+                value={newUser.password}
                 onChange={(e) =>
-                  setUserInfo({ ...userInfo, password: e.target.value })
+                  setNewUser({ ...newUser, password: e.target.value })
                 }
               />
               <Grid container>
@@ -94,19 +94,7 @@ const UserLogin: React.FC<Props> = () => {
                     variant="contained"
                     sx={{ width: "100%", height: 50 }}
                   >
-                    sign in
-                  </Button>
-                  <Typography variant="h6" sx={{ mt: 2 }} color="primary">
-                    Forgotten password?
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} md={12} sx={{ mt: 3, textAlign: "center" }}>
-                  <Button
-                    variant="contained"
-                    sx={{ height: 50 }}
-                    onClick={handleClickRegister}
-                  >
-                    Create New Account
+                    sign up
                   </Button>
                 </Grid>
               </Grid>
@@ -118,4 +106,4 @@ const UserLogin: React.FC<Props> = () => {
   );
 };
 
-export default UserLogin;
+export default UserSignUp;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Box, Button, Grid, Modal, TextField, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { AutoTextarea } from "./TextArea";
@@ -7,13 +8,14 @@ import { noteDataState } from "../store/atom";
 import { useRecoilState } from "recoil";
 import { fetchData } from "../services/api";
 import { useQuery } from "react-query";
-import { userId } from "../services/api";
+import { getUserId } from "../services/api";
 
 type Props = {};
 const AddNewNote: React.FC<Props> = () => {
   const { refetch } = useQuery("myData", fetchData, {
     enabled: true,
   });
+  const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [note, setNote] = useRecoilState(noteDataState);
@@ -29,17 +31,18 @@ const AddNewNote: React.FC<Props> = () => {
       [name]: value,
     });
   };
-
   const handleSubmit = async (e: any) => {
     try {
       e.preventDefault();
       const noteWithUserId = {
         ...note,
-        user: [userId],
+        user: [getUserId()],
       };
       await addNewNote(noteWithUserId);
+
       setIsModalOpen(false);
       refetch();
+      console.log(noteWithUserId);
     } catch (error: any) {
       console.log(error.stack);
       console.error("Error adding a new note:", error);
@@ -48,8 +51,9 @@ const AddNewNote: React.FC<Props> = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("loggedNoteappUser");
+    navigate("/");
   };
-  
+
   return (
     <Grid container mt={5} justifyContent="center" alignItems="center">
       <Grid item xs={10} md={8} sx={{ textAlign: "right" }}>

@@ -17,3 +17,12 @@ export const loginUserState = atom({
     password: "",
   },
 });
+
+export const SignInUserState = atom ({
+  key: "SignInUserState",
+  default: {
+    username: "",
+    name: "",
+    password: ""
+  }
+})
